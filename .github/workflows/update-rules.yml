@@ -1,0 +1,83 @@
+name: Update Apple Proxy Rules
+
+on:
+  schedule:
+    # 每天 UTC 04:00 (北京时间 12:00) 运行
+    - cron: '0 4 * * *'
+  workflow_dispatch: # 支持手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  update-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install requests beautifulsoup4 pyyaml
+
+      - name: Install sing-box
+        run: |
+          set -e
+          # Get latest release version
+          SINGBOX_VERSION=$(curl -sL https://api.github.com/repos/SagerNet/sing-box/releases/latest \
+            | grep '"tag_name"' | head -1 | sed 's/.*"v\(.*\)".*/\1/')
+          echo "sing-box version: ${SINGBOX_VERSION}"
+          curl -Lo sing-box.tar.gz \
+            "https://github.com/SagerNet/sing-box/releases/download/v${SINGBOX_VERSION}/sing-box-${SINGBOX_VERSION}-linux-amd64.tar.gz"
+          tar -xzf sing-box.tar.gz
+          sudo mv sing-box-${SINGBOX_VERSION}-linux-amd64/sing-box /usr/local/bin/
+          rm -rf sing-box.tar.gz sing-box-*/
+          sing-box version
+
+      - name: Install mihomo
+        run: |
+          set -e
+          # Get latest release version
+          MIHOMO_VERSION=$(curl -sL https://api.github.com/repos/MetaCubeX/mihomo/releases/latest \
+            | grep '"tag_name"' | head -1 | sed 's/.*"v\(.*\)".*/\1/')
+          echo "mihomo version: ${MIHOMO_VERSION}"
+          curl -Lo mihomo.gz \
+            "https://github.com/MetaCubeX/mihomo/releases/download/v${MIHOMO_VERSION}/mihomo-linux-amd64-v${MIHOMO_VERSION}.gz"
+          gunzip mihomo.gz
+          chmod +x mihomo
+          sudo mv mihomo /usr/local/bin/
+          mihomo -v
+
+      - name: Scrape Apple domains
+        run: python scripts/scrape.py
+
+      - name: Generate all rule formats
+        run: python scripts/convert.py
+
+      - name: Check for changes
+        id: check
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "✅ No changes detected"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "🔄 Changes detected:"
+            git diff --stat
+            git ls-files --others --exclude-standard
+          fi
+
+      - name: Commit and push
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          DATE=$(date -u '+%Y-%m-%d %H:%M UTC')
+          git commit -m "🔄 Auto-update rules: ${DATE}" \
+                     -m "Scraped from https://support.apple.com/en-us/101555"
+          git push

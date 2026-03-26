@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "rules": [
+    {
+      "domain": [
+        "apple-relay.apple.com",
+        "apple-relay.cloudflare.com",
+        "apple-relay.fastly-edge.com",
+        "cp4.cloudflare.com",
+        "guzzoni.apple.com"
+      ],
+      "domain_suffix": [
+        "chatgpt.com",
+        "oaistatic.com",
+        "oaiusercontent.com",
+        "openai.com",
+        "smoot.apple.com"
+      ],
+      "ip_cidr": [
+        "17.0.0.0/8"
+      ]
+    }
+  ]
+}

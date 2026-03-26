@@ -1,0 +1,57 @@
+{
+  "_comment": "手动维护的额外域名（不在 Apple 官方 HT101555 页面上但功能必须）",
+  "apple-intelligence": {
+    "domain": [],
+    "domain_suffix": [
+      "openai.com",
+      "chatgpt.com",
+      "oaiusercontent.com",
+      "oaistatic.com"
+    ],
+    "ip_cidr": [
+      "17.0.0.0/8"
+    ]
+  },
+  "apple-services": {
+    "domain": [
+      "tv.apple.com",
+      "books.apple.com",
+      "apps.apple.com",
+      "music.apple.com",
+      "news-events.apple.com",
+      "news-client.apple.com",
+      "weather-map2.apple.com",
+      "store.apple.com",
+      "support.apple.com",
+      "developer.apple.com",
+      "pancake.apple.com",
+      "sequoia.apple.com"
+    ],
+    "domain_suffix": [
+      "apple.com",
+      "apple.cn",
+      "apple.com.cn",
+      "icloud.com.cn",
+      "icloud.net.cn",
+      "apple-dns.com",
+      "apple-dns.net",
+      "aaplimg.com",
+      "me.com",
+      "itunes.com",
+      "shazam.com",
+      "siri.com",
+      "swift.org",
+      "webkit.org",
+      "appsto.re",
+      "itun.es",
+      "apple.news",
+      "ls.apple.com"
+    ],
+    "ip_cidr": [
+      "17.0.0.0/8",
+      "2403:300::/32",
+      "2620:149::/32",
+      "2a01:b740::/32"
+    ]
+  }
+}
