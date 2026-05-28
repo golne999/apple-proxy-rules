@@ -199,7 +199,7 @@ def main():
         with open(github_output, "a") as f:
             f.write(f"changed={'true' if changed else 'false'}\n")
 
-    return 0 if not changed else 1
+    return 0
 
 
 if __name__ == "__main__":
