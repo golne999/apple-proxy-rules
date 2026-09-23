@@ -3,8 +3,6 @@
   "apple-intelligence": {
     "domain": [],
     "domain_suffix": [
-      "openai.com",
-      "chatgpt.com",
       "oaiusercontent.com",
       "oaistatic.com"
     ],
