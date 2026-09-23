@@ -4,8 +4,6 @@ payload:
   - 'apple-relay.fastly-edge.com'
   - 'cp4.cloudflare.com'
   - 'guzzoni.apple.com'
-  - '+.chatgpt.com'
   - '+.oaistatic.com'
   - '+.oaiusercontent.com'
-  - '+.openai.com'
   - '+.smoot.apple.com'
